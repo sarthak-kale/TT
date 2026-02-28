@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings — AXION</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <style>
+        /* Settings Page Specific Styles */
+        .settings-container {
+            max-width: 800px;
+        }
+        
+        .settings-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .settings-section-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .settings-section-header svg {
+            width: 24px;
+            height: 24px;
+            color: var(--gradient-pink);
+        }
+        
+        .settings-section-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .settings-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .settings-item-info h3 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .settings-item-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border-subtle);
+            transition: var(--transition-fast);
+            border-radius: 26px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: var(--transition-fast);
+            border-radius: 50%;
+        }
+        
+        .toggle-switch input:checked + .toggle-slider {
+            background: linear-gradient(135deg, var(--gradient-orange), var(--gradient-pink));
+        }
+        
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+        
+        /* Input Styles */
+        .settings-input {
+            padding: 0.625rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition-fast);
+            width: 200px;
+        }
+        
+        .settings-input:focus {
+            border-color: var(--gradient-pink);
+            box-shadow: 0 0 0 3px rgba(247, 37, 133, 0.1);
+        }
+        
+        /* Danger Button */
+        .btn-danger {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid #ff4444;
+            color: #ff4444;
+        }
+        
+        .btn-danger:hover {
+            background: rgba(255, 68, 68, 0.2);
+        }
+        
+        /* File Input */
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        /* Success Message */
+        .success-message {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: rgba(76, 201, 240, 0.1);
+            border: 1px solid var(--gradient-cyan);
+            border-radius: var(--radius-md);
+            color: var(--gradient-cyan);
+            font-size: 0.9rem;
+            margin-bottom: var(--spacing-md);
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .settings-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-sm);
+            }
+            
+            .settings-input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">AXION</a>
+            <button class="collapse-btn" aria-label="Toggle sidebar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-th-large"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="tasks.html" class="nav-item">
+                <i class="fas fa-check-square"></i>
+                <span>Tasks</span>
+            </a>
+            <a href="calendar.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Calendar</span>
+            </a>
+            <a href="pomodoro.html" class="nav-item">
+                <i class="fas fa-clock"></i>
+                <span>Pomodoro</span>
+            </a>
+            <a href="analytics.html" class="nav-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="settings.html" class="nav-item active">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile" id="userProfile">
+                <div class="user-avatar">DU</div>
+                <div class="user-info">
+                    <div class="user-name">Demo User</div>
+                    <div class="user-email">demo@axion.app</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" aria-label="Toggle menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <h1 class="page-title">Settings</h1>
+            </div>
+            <div class="topbar-right">
+                <button class="topbar-btn" id="logoutBtn" aria-label="Logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Settings Content -->
+        <div class="dashboard-content">
+            <div class="settings-container">
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    Settings saved successfully!
+                </div>
+
+                <!-- Profile Settings -->
+                <div class="settings-section">
+                    <div class="settings-section-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <h2>Profile</h2>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <h3>Display Name</h3>
+                            <p>Your name will be displayed on your profile</p>
+                        </div>
+                        <input type="text" class="settings-input" id="displayName" placeholder="Enter your name" value="Demo User">
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <h3>Email Address</h3>
+                            <p>Your email address for account notifications</p>
+                        </div>
+                        <input type="email" class="settings-input" id="userEmail" placeholder="Enter your email" value="demo@axion.app" disabled>
+                    </div>
+                </div>
+
+                <!-- Appearance Settings -->
+                <div class="settings-section">
+                    <div class="settings-section-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                        <h2>Appearance</h2>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <h3>Dark Mode</h3>
+                            <p>Enable dark theme for the application</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="darkModeToggle" checked disabled>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Data Settings -->
+                <div class="settings-section">
+                    <div class="settings-section-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                        <h2>Data Management</h2>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <h3>Export Tasks</h3>
+                            <p>Download all your tasks as a JSON file</p>
+                        </div>
+                        <button class="btn btn-secondary" id="exportBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Export
+                        </button>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <h3>Import Tasks</h3>
+                            <p>Import tasks from a JSON file</p>
+                        </div>
+                        <div class="file-input-wrapper">
+                            <button class="btn btn-secondary" id="importBtn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                Import
+                            </button>
+                            <input type="file" id="importFile" accept=".json">
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <h3>Reset All Data</h3>
+                            <p>Delete all tasks and reset to default settings</p>
+                        </div>
+                        <button class="btn btn-danger" id="resetBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            Reset Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <div style="display: flex; justify-content: flex-end; gap: var(--spacing-sm);">
+                    <button class="btn btn-primary" id="saveSettingsBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script>
+        // Initialize settings page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check auth
+            if (!window.AXION.auth.isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Load user data
+            const user = window.AXION.auth.getCurrentUser();
+            if (user) {
+                document.getElementById('displayName').value = user.name || '';
+                document.getElementById('userEmail').value = user.email || '';
+                
+                const userName = document.querySelector('.user-name');
+                const userEmail = document.querySelector('.user-email');
+                const userAvatar = document.querySelector('.user-avatar');
+                
+                if (userName) userName.textContent = user.name;
+                if (userEmail) userEmail.textContent = user.email;
+                if (userAvatar) userAvatar.textContent = user.avatar;
+            }
+
+            // Logout
+            document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                window.AXION.auth.logout();
+            });
+
+            // Sidebar
+            const collapseBtn = document.querySelector('.collapse-btn');
+            const sidebar = document.querySelector('.sidebar');
+            
+            collapseBtn?.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+            });
+
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidebarOverlay = document.querySelector('.sidebar-overlay');
+            
+            menuToggle?.addEventListener('click', () => {
+                sidebar.classList.toggle('mobile-open');
+                sidebarOverlay?.classList.toggle('active');
+            });
+            
+            sidebarOverlay?.addEventListener('click', () => {
+                sidebar.classList.remove('mobile-open');
+                sidebarOverlay.classList.remove('active');
+            });
+
+            // Save settings
+            document.getElementById('saveSettingsBtn')?.addEventListener('click', saveSettings);
+
+            // Export tasks
+            document.getElementById('exportBtn')?.addEventListener('click', exportTasks);
+
+            // Import tasks
+            document.getElementById('importFile')?.addEventListener('change', importTasks);
+
+            // Reset data
+            document.getElementById('resetBtn')?.addEventListener('click', resetData);
+        });
+
+        function saveSettings() {
+            const displayName = document.getElementById('displayName').value;
+            const user = window.AXION.auth.getCurrentUser();
+            
+            if (user && displayName) {
+                user.name = displayName;
+                user.avatar = displayName.charAt(0).toUpperCase();
+                window.AXION.storage.save(window.AXION.CONFIG.STORAGE_KEYS.USER, user);
+                
+                // Update UI
+                document.querySelector('.user-name').textContent = displayName;
+                document.querySelector('.user-avatar').textContent = user.avatar;
+                
+                showSuccessMessage('Settings saved successfully!');
+            }
+        }
+
+        async function exportTasks() {
+            const tasks = await window.AXION.tasks.load();
+            const dataStr = JSON.stringify(tasks, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'axion-tasks-' + new Date().toISOString().split('T')[0] + '.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showSuccessMessage('Tasks exported successfully!');
+        }
+
+        function importTasks(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const tasks = JSON.parse(e.target.result);
+                    if (Array.isArray(tasks)) {
+                        await window.AXION.tasks.save(tasks);
+                        showSuccessMessage('Tasks imported successfully!');
+                    } else {
+                        alert('Invalid file format. Please upload a valid JSON file.');
+                    }
+                } catch (error) {
+                    alert('Error importing file. Please check the file format.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetData() {
+            if (confirm('Are you sure you want to reset all data? This action cannot be undone.')) {
+                window.AXION.storage.clear();
+                window.location.href = 'index.html';
+            }
+        }
+
+        function showSuccessMessage(message) {
+            const successEl = document.getElementById('successMessage');
+            successEl.textContent = message;
+            successEl.classList.add('show');
+            
+            setTimeout(() => {
+                successEl.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

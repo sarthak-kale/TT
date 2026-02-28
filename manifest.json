@@ -1,0 +1,23 @@
+{
+    "name": "AXION - AI Productivity & Planning Suite",
+    "short_name": "AXION",
+    "description": "Tasks, Calendar, Focus & Analytics in one beautiful workspace",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#050505",
+    "theme_color": "#f72585",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["productivity", "business", "utilities"],
+    "lang": "en-US",
+    "dir": "ltr",
+    "scope": "./",
+    "prefer_related_applications": false
+}
