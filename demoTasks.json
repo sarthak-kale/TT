@@ -1,0 +1,111 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Review project proposal",
+      "description": "Go through the Q4 marketing proposal and provide feedback",
+      "category": "Work",
+      "priority": "high",
+      "completed": false,
+      "createdAt": "2024-01-15T09:00:00Z",
+      "dueDate": "2024-01-20"
+    },
+    {
+      "id": 2,
+      "title": "Morning workout",
+      "description": "30 minutes cardio and strength training",
+      "category": "Health",
+      "priority": "medium",
+      "completed": true,
+      "createdAt": "2024-01-15T07:00:00Z",
+      "dueDate": "2024-01-15"
+    },
+    {
+      "id": 3,
+      "title": "Team standup meeting",
+      "description": "Daily sync with the development team",
+      "category": "Work",
+      "priority": "high",
+      "completed": false,
+      "createdAt": "2024-01-15T08:30:00Z",
+      "dueDate": "2024-01-15"
+    },
+    {
+      "id": 4,
+      "title": "Buy groceries",
+      "description": "Milk, eggs, bread, vegetables, fruits",
+      "category": "Personal",
+      "priority": "low",
+      "completed": false,
+      "createdAt": "2024-01-14T18:00:00Z",
+      "dueDate": "2024-01-16"
+    },
+    {
+      "id": 5,
+      "title": "Read book chapter 5",
+      "description": "Finish reading 'Atomic Habits' chapter 5",
+      "category": "Learning",
+      "priority": "medium",
+      "completed": true,
+      "createdAt": "2024-01-14T21:00:00Z",
+      "dueDate": "2024-01-15"
+    },
+    {
+      "id": 6,
+      "title": "Schedule dentist appointment",
+      "description": "Call and book routine checkup",
+      "category": "Personal",
+      "priority": "medium",
+      "completed": false,
+      "createdAt": "2024-01-13T10:00:00Z",
+      "dueDate": "2024-01-25"
+    },
+    {
+      "id": 7,
+      "title": "Complete UI design mockups",
+      "description": "Finish the dashboard redesign for mobile",
+      "category": "Work",
+      "priority": "high",
+      "completed": false,
+      "createdAt": "2024-01-12T14:00:00Z",
+      "dueDate": "2024-01-18"
+    },
+    {
+      "id": 8,
+      "title": "Meditation session",
+      "description": "15 minutes mindfulness practice",
+      "category": "Health",
+      "priority": "low",
+      "completed": false,
+      "createdAt": "2024-01-15T06:30:00Z",
+      "dueDate": "2024-01-15"
+    },
+    {
+      "id": 9,
+      "title": "Update LinkedIn profile",
+      "description": "Add recent projects and skills",
+      "category": "Personal",
+      "priority": "low",
+      "completed": false,
+      "createdAt": "2024-01-10T11:00:00Z",
+      "dueDate": "2024-01-30"
+    },
+    {
+      "id": 10,
+      "title": "Learn React hooks",
+      "description": "Complete useState and useEffect tutorials",
+      "category": "Learning",
+      "priority": "medium",
+      "completed": true,
+      "createdAt": "2024-01-11T19:00:00Z",
+      "dueDate": "2024-01-14"
+    }
+  ],
+  "users": [
+    {
+      "email": "demo@axion.app",
+      "password": "demo123",
+      "name": "Demo User"
+    }
+  ]
+}
